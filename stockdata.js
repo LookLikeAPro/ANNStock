@@ -65,7 +65,6 @@ module.exports.download = function(symbol, startStamp, endStamp, callback) {
       });
     });
     */
-
     response.pipe(memStream);
     response.on('end', function() {
       data = memStream.toString();
@@ -73,7 +72,7 @@ module.exports.download = function(symbol, startStamp, endStamp, callback) {
         data.splice(0, 1);
         for (var i=0; i<data.length; i++){
           var temp = data[i][0].split("-");
-          data[i] = {input:[parseInt(getStamp(temp[0], temp[1], temp[2]))], output:[parseFloat(data[i][6])]};
+          data[i] = {input:[parseInt(getStamp(temp[0], temp[1], temp[2]))/1000000000], output:[parseFloat(data[i][6])/100]};
         }
         callback(data);
       });
