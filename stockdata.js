@@ -40,7 +40,8 @@ function getYear(stamp){
 function getStamp(year, month, day){
   return (new Date(year + "/" + month + "/" + day).getTime() / 1000);
 }
-
+var data;
+module.exports.data = data;
 module.exports.download = function(symbol, startStamp, endStamp, callback) {
   var param = {s:symbol,
                a:getMonth(startStamp),
@@ -67,14 +68,13 @@ module.exports.download = function(symbol, startStamp, endStamp, callback) {
 
     response.pipe(memStream);
     response.on('end', function() {
-      var data = memStream.toString();
+      data = memStream.toString();
       csv.parse(data, function(err, data){
-        for (var i=0; i<data.length; i++){
-          data[i].splice(1, 5);
-          var temp = data[i][0].split("-");
-          data[i][0]=getStamp(temp[0], temp[1], temp[2]);
-        }
         data.splice(0, 1);
+        for (var i=0; i<data.length; i++){
+          var temp = data[i][0].split("-");
+          data[i] = {input:[parseInt(getStamp(temp[0], temp[1], temp[2]))], output:[parseFloat(data[i][6])]};
+        }
         callback(data);
       });
     });
