@@ -51,7 +51,7 @@ api.download("YHOO", 0,0, function (res){
   //console.log(res);
   //flood(trainStream, data);
   net.train(data, {
-    errorThresh: 0.005,  // error threshold to reach
+    errorThresh: 0.003,  // error threshold to reach
     iterations: 10000,   // maximum training iterations
     log: false,           // console.log() progress periodically
     logPeriod: 10,       // number of iterations between logging

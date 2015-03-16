@@ -40,8 +40,15 @@ function getYear(stamp){
 function getStamp(year, month, day){
   return (new Date(year + "/" + month + "/" + day).getTime() / 1000);
 }
-var data;
-module.exports.data = data;
+
+function write (data){
+  var str = '';
+  for (var i=0; i<data.length; i++){
+    str = str.concat(data[i].input+"    --->    "+data[i].output+'\n');
+  }
+  fs.writeFile("./file.csv", str);
+}
+
 module.exports.download = function(symbol, startStamp, endStamp, callback) {
   var param = {s:symbol,
                a:getMonth(startStamp),
@@ -67,13 +74,17 @@ module.exports.download = function(symbol, startStamp, endStamp, callback) {
     */
     response.pipe(memStream);
     response.on('end', function() {
-      data = memStream.toString();
+      var data = memStream.toString();
       csv.parse(data, function(err, data){
         data.splice(0, 1);
+        var maxStamp = parseInt(getStamp(data[0][0].split("-")[0], data[0][0].split("-")[1], data[0][0].split("-")[2]));
+        var minStamp = parseInt(getStamp(data[data.length-1][0].split("-")[0], data[data.length-1][0].split("-")[1], data[data.length-1][0].split("-")[2]));
+        var range = maxStamp - minStamp;
         for (var i=0; i<data.length; i++){
           var temp = data[i][0].split("-");
-          data[i] = {input:[parseInt(getStamp(temp[0], temp[1], temp[2]))/1000000000], output:[parseFloat(data[i][6])/100]};
+          data[i] = {input:[(parseInt(getStamp(temp[0], temp[1], temp[2]))-minStamp)/range], output:[parseFloat(data[i][6])/100]};
         }
+        write(data);
         callback(data);
       });
     });
