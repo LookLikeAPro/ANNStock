@@ -50,12 +50,18 @@ api.download("YHOO", 0,0, function (res){
   data = res;
   //console.log(res);
   //flood(trainStream, data);
+  //console.log(data);
   net.train(data, {
     errorThresh: 0.003,  // error threshold to reach
-    iterations: 10000,   // maximum training iterations
-    log: false,           // console.log() progress periodically
+    iterations: 5000,   // maximum training iterations
+    log: true,           // console.log() progress periodically
     logPeriod: 10,       // number of iterations between logging
     learningRate: 0.3    // learning rate
   });
-  console.log(net.run([0.8292816]));
+  console.log(net.run([1]));
+  console.log(net.run([0.8]));
+  console.log(net.run([0.6]));
+  console.log(net.run([0.4]));
+  console.log(net.run([0.2]));
+  console.log(net.run([0]));
 });
