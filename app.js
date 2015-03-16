@@ -13,6 +13,7 @@ var not = [{input: [1], output: [0]},
            {input: [0], output: [1]}];
 
 var data = {};
+var iteration = 0;
 
 var sample = [{ input: [1335499200], output: [15.57] },
   { input: [1335412800], output: [15.53] },
@@ -25,13 +26,14 @@ var sample = [{ input: [1335499200], output: [15.57] },
 var trainStream = net.createTrainStream({
   //Write training data to the stream. Called on each training iteration.
   floodCallback: function() {
+    console.log("iteration: "+ iteration);
+    iteration++;
     flood(trainStream, data);
   },
   //Called when the network is done training.
   doneTrainingCallback: function(obj) {
     console.log("trained in " + obj.iterations + " iterations with error: "
                 + obj.error);
-
     var result = net.run([1334800000]);
     console.log("0 XOR 1: ", result);  // 0.987
   }
