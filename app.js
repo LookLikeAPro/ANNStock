@@ -1,5 +1,5 @@
 var assert = require("assert"),
-    brain = require("brain/lib/brain.js");
+    brain = require("brain");
 var api = require('./stockdata.js');
 
 var net = new brain.NeuralNetwork();
